@@ -1,4 +1,6 @@
 """
+Tasks
+
 1.Swap LSTM for GRU:
 1.1.Modify the original app.py code to replace the LSTM layer with a GRU (keras.layers.GRU) layer.
 1.2.Train the model for the same number of epochs.
