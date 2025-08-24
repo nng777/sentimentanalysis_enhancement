@@ -5,7 +5,7 @@ from tensorflow import keras
 from tensorflow.keras.datasets import imdb
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Embedding, LSTM, Dense, Bidirectional
+from tensorflow.keras.layers import Embedding, LSTM, Dense
 
 
 # --- Simplified Explanation ---
@@ -42,12 +42,17 @@ model = Sequential([
     # into meaningful vectors (e.g., [0.1, -0.4, 0.8, ...]).
     Embedding(input_dim=num_words, output_dim=embedding_dim, input_length=maxlen),
 
-    # Layer 2: The Bidirectional LSTM Layer
-    # This core memory layer reads the sequence forward and backward to better
-    # understand the overall context of the review.
-    Bidirectional(LSTM(units=lstm_units)),
+    # Layer 2: First LSTM Layer
+    # This layer processes the sequence of word vectors and passes the full sequence
+    # to the next LSTM layer by setting return_sequences=True.
+    LSTM(units=lstm_units, return_sequences=True),
 
-    # Layer 3: The Output Layer
+    # Layer 3: Second LSTM Layer
+    # This layer receives the sequence from the previous LSTM and condenses it into
+    # a single context vector representing the review.
+    LSTM(units=lstm_units),
+
+    # Layer 4: The Output Layer
     # This is a single neuron that will output one number between 0 and 1.
     # 0 will mean "negative review" and 1 will mean "positive review".
     Dense(1, activation='sigmoid')
